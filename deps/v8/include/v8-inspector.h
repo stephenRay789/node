@@ -106,6 +106,7 @@ class V8_EXPORT V8StackTrace {
   virtual int topLineNumber() const = 0;
   virtual int topColumnNumber() const = 0;
   virtual StringView topScriptId() const = 0;
+  virtual int topScriptIdAsInteger() const = 0;
   virtual StringView topFunctionName() const = 0;
 
   virtual ~V8StackTrace() = default;
@@ -179,6 +180,10 @@ class V8_EXPORT V8InspectorClient {
   virtual void endUserGesture() {}
 
   virtual std::unique_ptr<StringBuffer> valueSubtype(v8::Local<v8::Value>) {
+    return nullptr;
+  }
+  virtual std::unique_ptr<StringBuffer> descriptionForValueSubtype(
+      v8::Local<v8::Context>, v8::Local<v8::Value>) {
     return nullptr;
   }
   virtual bool formatAccessorsAsProperties(v8::Local<v8::Value>) {

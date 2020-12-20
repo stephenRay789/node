@@ -29,6 +29,8 @@ class V8_EXPORT_PRIVATE ProfilerListener : public CodeEventListener {
   ProfilerListener(Isolate*, CodeEventObserver*,
                    CpuProfilingNamingMode mode = kDebugNaming);
   ~ProfilerListener() override;
+  ProfilerListener(const ProfilerListener&) = delete;
+  ProfilerListener& operator=(const ProfilerListener&) = delete;
 
   void CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
                        const char* name) override;
@@ -41,7 +43,8 @@ class V8_EXPORT_PRIVATE ProfilerListener : public CodeEventListener {
                        Handle<SharedFunctionInfo> shared,
                        Handle<Name> script_name, int line, int column) override;
   void CodeCreateEvent(LogEventsAndTags tag, const wasm::WasmCode* code,
-                       wasm::WasmName name) override;
+                       wasm::WasmName name, const char* source_url,
+                       int code_offset, int script_id) override;
 
   void CallbackEvent(Handle<Name> name, Address entry_point) override;
   void GetterCallbackEvent(Handle<Name> name, Address entry_point) override;
@@ -88,8 +91,6 @@ class V8_EXPORT_PRIVATE ProfilerListener : public CodeEventListener {
   CodeEventObserver* observer_;
   StringsStorage function_and_resource_names_;
   const CpuProfilingNamingMode naming_mode_;
-
-  DISALLOW_COPY_AND_ASSIGN(ProfilerListener);
 };
 
 }  // namespace internal
